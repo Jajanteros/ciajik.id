@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIAJIK STORE - E-commerce Top-up Lengkap</title>
+    
+    <style>
+        /* --- BASE STYLING & BACKGROUND --- */
+        body {
+            font-family: Arial, sans-serif; 
+            color: #f0f0f0; 
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            background-image: url('https://i.imgur.com/z1Q4t9k.jpeg'); 
+            background-color: #dd00ad; 
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px 0;
+            min-height: 80vh; 
+            background-color: rgba(20, 13, 19, 0.9); 
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            box-shadow: 0 0 30px rgba(252, 0, 189, 0.7); /* Efek bayangan keren */
+        }
+
+        /* --- HEADER --- */
+        header {
+            width: 100%;
+            background-color: #be14a2;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #e60199; /* Garis bawah keren */
+            box-shadow: 0 4px 10px rgba(236, 4, 198, 0.5);
+        }
+
+        #user-display { font-size: 0.9em; color: #ccc; font-weight: 400; display: flex; align-items: center; }
+        .tele-user { color: #00bfff; font-weight: 600; margin-left: 5px; }
+        .store-name { 
+            font-size: 1.6em; 
+            font-weight: 800; 
+            color: #7fffd4; 
+            text-shadow: 0 0 8px rgba(127, 255, 212, 0.8); /* Efek neon pada nama toko */
+        }
+        .star-icon { color: #FFD700; margin: 0 5px; }
+        #time-date-display { color: #ccc; font-size: 0.9em; }
+
+        /* --- BUTTONS & INPUTS --- */
+        .btn { padding: 8px 15px; margin-left: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: background-color 0.2s; }
+        .btn:hover { opacity: 0.8; }
+        .btn-bantuan { background-color: #2c2c2c; color: #f0f0f0; }
+        .btn-logout, .btn-login { background-color: #e74c3c; color: white; }
+        .btn-register { background-color: #3498db; color: white; }
+
+        /* --- SEARCH & KATEGORI SELECT --- */
+        .search-bar-group { display: flex; justify-content: center; gap: 15px; margin: 30px 0; }
+        .search-input, .category-select {
+            padding: 12px 18px; border-radius: 8px; border: 1px solid #444;
+            background-color: #222; color: #f0f0f0; font-size: 1em; width: 300px; box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        .search-input:focus, .category-select:focus { border-color: #3498db; }
+
+        /* --- FILTER BUTTONS --- */
+        .filter-buttons { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 10px; /* Jarak sedikit lebih besar */
+            margin-bottom: 40px; 
+        }
+        .filter-btn {
+            background-color: #222; color: #ccc; padding: 10px 18px; border-radius: 25px;
+            font-weight: 600; border: 1px solid #333; cursor: pointer; transition: background-color 0.2s, transform 0.1s;
+        }
+        .filter-btn:hover { transform: translateY(-2px); }
+        .filter-btn.active { 
+            background-color: #3498db; 
+            border-color: #3498db; 
+            color: white; 
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.5); /* Efek cahaya biru */
+        }
+
+        /* --- PRODUCT GRID & CARDS (EFEK BERGERAK & RAPI) --- */
+        .product-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px; 
+        }
+        .product-card {
+            background-color: #1a1a1a; 
+            padding: 30px 20px; /* Padding lebih besar */
+            border-radius: 12px; 
+            text-align: center;
+            border: 2px solid #333; 
+            display: flex;
+            flex-direction: column; 
+            justify-content: center; /* Konten di tengah vertikal */
+            min-height: 150px; /* Tinggi minimum agar seragam */
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        }
+        .product-card:hover {
+            transform: translateY(-8px); 
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(144, 238, 144, 0.4); /* Efek hijau pada hover */
+        }
+
+        .product-title { 
+            font-size: 1.6em; /* Font lebih besar */
+            font-weight: 700; 
+            color: #90ee90; 
+            margin-bottom: 8px; 
+            text-shadow: 0 0 5px rgba(144, 238, 144, 0.5);
+        }
+        .product-subtitle {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-bottom: 0;
+        }
+
+        /* HILANGKAN HARGA DAN TOMBOL BELI DI KARTU PRODUK */
+        .product-price, .product-card button { display: none; } 
+        
+        /* --- FORM (LOGIN/DAFTAR) & IKON RAPI --- */
+        #auth-view { 
+            display: none; max-width: 400px; margin: 80px auto; padding: 40px; 
+            background-color: #1a1a1a; border-radius: 15px; 
+            text-align: center; 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+            border: 1px solid #333;
+        }
+        #auth-view h2 { color: #7fffd4; margin-bottom: 25px; }
+        .input-group { position: relative; margin-bottom: 20px; text-align: left; }
+        .input-group input {
+            width: calc(100% - 40px); padding: 12px 10px 12px 40px; border-radius: 8px;
+            border: 1px solid #444; background-color: #222; color: #f0f0f0; font-size: 1em;
+            box-sizing: border-box; outline: none;
+        }
+        .input-group .input-icon {
+            position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+            color: #90ee90; /* Ikon berwarna hijau */
+            font-size: 1.2em;
+        }
+        .form-switch { color: #3498db; cursor: pointer; margin-top: 15px; font-size: 0.9em; transition: color 0.2s; }
+        .form-switch:hover { color: #7fffd4; }
+
+        /* --- MODAL (ANIMASI BERGERAK) --- */
+        .modal { 
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0; 
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); 
+            overflow: auto;
+            opacity: 0;
+            transform: translateY(-50px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+        .modal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .modal-content { 
+            background-color: #1a1a1a; margin: 5% auto; padding: 30px; 
+            border: 1px solid #444; width: 80%; max-width: 500px; 
+            border-radius: 10px; text-align: center;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.3);
+        }
+        .modal-content h3 { color: #7fffd4; }
+        .modal-content label { display: block; margin-top: 15px; margin-bottom: 5px; text-align: left; font-weight: bold; }
+        .modal-content select, .modal-content input[type="text"] { 
+            width: 100%; padding: 10px; border: 1px solid #444; 
+            background-color: #222; color: #f0f0f0; border-radius: 5px; 
+        }
+
+        #final-price-display {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #66ff66;
+            margin: 20px 0;
+            display: block;
+            background-color: #2c2c2c;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .btn-konfirmasi { background-color: #2ecc71; margin-top: 20px; width: 100%; padding: 12px; }
+        .btn-tutup { background-color: #e74c3c; margin-top: 15px; padding: 10px; }
+    </style>
+    </head>
+<body>
+    <header>
+        <div id="user-display">
+            </div>
+        <div class="store-name">
+            <span class="star-icon">✨</span> CIAJIK STORE <span class="star-icon">✨</span>
+        </div>
+        <div class="header-actions">
+            <span id="time-date-display">17:00 | 28/9/2025</span>
+            <button class="btn btn-bantuan">Bantuan</button>
+            <button id="auth-button" class="btn btn-login" onclick="showAuthView('login')">Login / Daftar</button>
+            <button id="logout-button" class="btn btn-logout" style="display:none;" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="product-view">
+            <div class="search-bar-group">
+                <input type="text" placeholder="Cari produk..." class="search-input">
+                <select class="category-select">
+                    <option>Semua Kategori</option>
+                    <option>Game</option>
+                    <option>Musik</option>
+                    <option>Streaming</option>
+                    <option>Sosmed</option>
+                    <option>Voucher</option>
+                </select>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all" onclick="filterProducts('all', this)">Semua</button>
+                <button class="filter-btn" data-category="game" onclick="filterProducts('game', this)">🎮 Game</button>
+                <button class="filter-btn" data-category="music" onclick="filterProducts('music', this)">🎵 Musik</button>
+                <button class="filter-btn" data-category="streaming" onclick="filterProducts('streaming', this)">📹 Streaming</button>
+                <button class="filter-btn" data-category="sosmed" onclick="filterProducts('sosmed', this)">💬 Sosmed</button>
+                <button class="filter-btn" data-category="voucher" onclick="filterProducts('voucher', this)">🎫 Voucher</button>
+            </div>
+
+            <div class="product-grid">
+                <div class="product-card topup-card" data-category="game" data-product="Diamond MLBB" data-id="mlbb" onclick="openPurchaseModal(this)">
+                    <div class="product-title">Diamond MLBB</div>
+                    <div class="product-subtitle">Top up Mobile Legends</div>
+                </div>
+                <div class="product-card topup-card" data-category="game" data-product="Diamond Free Fire" data-id="ff" onclick="openPurchaseModal(this)">
+                    <div class="product-title">Diamond Free Fire</div>
+                    <div class="product-subtitle">Top up Free Fire</div>
+                </div>
+                <div class="product-card topup-card" data-category="game" data-product="UC PUBG" data-id="pubg" onclick="openPurchaseModal(this)">
+                    <div class="product-title">UC PUBG</div>
+                    <div class="product-subtitle">Top up PUBG Mobile</div>
+                </div>
+                <div class="product-card topup-card" data-category="game" data-product="Cash Point Blank" data-id="pb" onclick="openPurchaseModal(this)">
+                    <div class="product-title">Cash Point Blank</div>
+                    <div class="product-subtitle">Top up PB Zepetto</div>
+                </div>
+                <div class="product-card subscription-card" data-category="streaming" data-product="Netflix Premium" data-id="netflix" onclick="openPurchaseModal(this)">
+                    <div class="product-title">Netflix Premium</div>
+                    <div class="product-subtitle">Akun Langganan Streaming</div>
+                </div>
+                <div class="product-card subscription-card" data-category="music" data-product="Spotify Premium" data-id="spotify" onclick="openPurchaseModal(this)">
+                    <div class="product-title">Spotify Premium</div>
+                    <div class="product-subtitle">Akun Langganan Musik</div>
+                </div>
+                <div class="product-card subscription-card" data-category="sosmed" data-product="Follower Instagram" data-id="ig_follower" onclick="openPurchaseModal(this)">
+                    <div class="product-title">Follower Instagram</div>
+                    <div class="product-subtitle">Tambah Followers Aktif</div>
+                </div>
+                <div class="product-card subscription-card" data-category="voucher" data-product="Voucher Google Play" data-id="gplay_voucher" onclick="openPurchaseModal(this)">
+                    <div class="product-title">Voucher Google Play</div>
+                    <div class="product-subtitle">Beli Aplikasi & Game</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="auth-view" style="display:none;">
+            <div id="login-form">
+                <h2>LOGIN</h2>
+                <div class="input-group">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="login-username" placeholder="Username">
+                </div>
+                <div class="input-group">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="login-password" placeholder="Password">
+                </div>
+                <button class="btn btn-login" onclick="login()">Login</button>
+                <div class="form-switch" onclick="showAuthView('register')">Belum punya akun? Daftar di sini.</div>
+            </div>
+            
+            <div id="register-form" style="display:none;">
+                <h2>DAFTAR AKUN BARU</h2>
+                <div class="input-group">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="register-username" placeholder="Username (mis: profileku)">
+                </div>
+                <div class="input-group">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="register-password" placeholder="Password">
+                </div>
+                <div class="input-group">
+                    <span class="input-icon">💬</span>
+                    <input type="text" id="register-tele" placeholder="Telegram ID (mis: @teleku)">
+                </div>
+                <button class="btn btn-register" onclick="register()">Daftar</button>
+                <div class="form-switch" onclick="showAuthView('login')">Sudah punya akun? Login di sini.</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="purchase-modal" class="modal">
+        <div class="modal-content">
+            <h3>Checkout <span id="modal-product-name"></span></h3>
+            
+            <label for="input-id">ID Game / Email Tujuan:</label>
+            <input type="text" id="input-id" placeholder="Masukkan ID Game atau Email Anda" required>
+
+            <label for="quantity-select">Pilih Jumlah / Periode:</label>
+            <select id="quantity-select" onchange="updatePrice()">
+                </select>
+            
+            <label for="final-price-display">Total Harga:</label>
+            <span id="final-price-display">Rp 0,00</span>
+
+            <label for="payment-method">Pilih Metode Pembayaran:</label>
+            <select id="payment-method" onchange="updatePaymentDetails()">
+                <option value="bank">Transfer Bank (BCA/Mandiri)</option>
+                <option value="ewallet">E-Wallet (Dana/Ovo/Gopay)</option>
+                <option value="pulsa">Pulsa (Telkomsel/XL)</option>
+            </select>
+            
+            <button class="btn btn-konfirmasi" onclick="confirmPurchase()">Konfirmasi Pembelian</button>
+            <button class="btn btn-tutup" onclick="closeModal('purchase-modal')">Tutup</button>
+        </div>
+    </div>
+
+    <div id="transfer-modal" class="modal">
+        <div class="modal-content">
+            <h3 style="color: #4CAF50;">✅ TRANSAKSI BERHASIL DIBUAT</h3>
+            <p>Segera lakukan pembayaran untuk pesanan Anda:</p>
+            
+            <p style="margin-top: 10px;">Produk: <strong id="transfer-product-name"></strong></p>
+            <p>Total Bayar: <strong style="font-size: 1.5em; color: #66ff66;" id="transfer-product-price"></strong></p>
+            
+            <hr style="border-color: #333; margin: 15px 0;">
+            
+            <h4>DETAIL TRANSFER</h4>
+            <p>Tujuan Pembayaran: <strong id="transfer-payment-type"></strong></p>
+            <p>Nomor / ID Tujuan: <strong style="font-size: 1.2em; color: #FFD700;" id="transfer-account-number"></strong></p>
+            <p>Atas Nama: <strong id="transfer-account-name"></strong></p>
+            
+            <p style="margin-top: 20px; font-size: 0.9em; color: #aaa;">**HUBUNGI TELE: <strong style="color: #00bfff;">@ardiansahhasibuan</strong>**</p>
+
+            <button class="btn btn-tutup" onclick="closeModal('transfer-modal')">Tutup & Lanjutkan Belanja</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. SETUP DATA (Simulasi Database & Harga Dinamis) ---
+        let users = JSON.parse(localStorage.getItem('ciajik_users')) || [];
+        let currentUser = localStorage.getItem('ciajik_currentUser');
+        let currentProduct = {}; 
+        
+        // DATA HARGA DINAMIS
+        const priceData = {
+            'mlbb': [ { label: '50 Diamond', price: 15000 }, { label: '100 Diamond', price: 28000 }, { label: '250 Diamond', price: 65000 } ],
+            'ff': [ { label: '70 Diamond', price: 10000 }, { label: '140 Diamond', price: 20000 }, { label: '355 Diamond', price: 50000 } ],
+            'pubg': [ { label: '60 UC', price: 15000 }, { label: '300 UC', price: 65000 } ],
+            'pb': [ { label: '600 Cash', price: 25000 }, { label: '1200 Cash', price: 48000 } ],
+            'netflix': [ { label: '1 Bulan (Basic)', price: 50000 }, { label: '3 Bulan (Premium)', price: 145000 } ],
+            'spotify': [ { label: '1 Bulan Premium', price: 35000 }, { label: '3 Bulan Premium', price: 95000 } ],
+            'ig_follower': [ { label: '1000 Follower', price: 25000 }, { label: '5000 Follower', price: 100000 } ],
+            'gplay_voucher': [ { label: 'Voucher Rp 50.000', price: 50000 }, { label: 'Voucher Rp 100.000', price: 100000 } ]
+        };
+
+        // DATA DETAIL PEMBAYARAN TERBARU
+        const paymentDetails = {
+            'bank': { type: 'Transfer Bank (BCA)', number: '8710239088', name: 'ARDIANSAH HASIBUAN' },
+            'ewallet': { type: 'E-Wallet (Dana)', number: '+6285129538972', name: 'ARDIAN SAHPUTRA' }, // Detail Dana terbaru
+            'pulsa': { type: 'Pulsa (Telkomsel)', number: '+6281234567890', name: 'ARDIAN SAHPUTRA' }
+        };
+
+        // --- 2. FITUR WAKTU BERJALAN ---
+        function updateTime() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false });
+            const date = now.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            document.getElementById('time-date-display').textContent = `${time} | ${date}`;
+        }
+        setInterval(updateTime, 1000); 
+
+        // --- 3. FUNGSI FILTER PRODUK ---
+        function filterProducts(category, clickedButton) {
+            const cards = document.querySelectorAll('.product-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            clickedButton.classList.add('active');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // --- 4. FUNGSI VIEW & HEADER ---
+        function updateHeader() {
+            const userDisplay = document.getElementById('user-display');
+            const authButton = document.getElementById('auth-button');
+            const logoutButton = document.getElementById('logout-button');
+            
+            if (currentUser) {
+                const user = users.find(u => u.username === currentUser);
+                // Menampilkan Username dan Telegram ID yang terdaftar
+                userDisplay.innerHTML = `<span class="icon">👤</span> ${user.username} / <span class="tele-user">${user.tele}</span>`;
+                
+                authButton.style.display = 'none';
+                logoutButton.style.display = 'inline-block';
+            } else {
+                userDisplay.innerHTML = ``;
+                authButton.style.display = 'inline-block';
+                logoutButton.style.display = 'none';
+            }
+        }
+
+        function showAuthView(type) {
+            document.getElementById('product-view').style.display = 'none';
+            document.getElementById('auth-view').style.display = 'block';
+            document.getElementById('login-form').style.display = type === 'login' ? 'block' : 'none';
+            document.getElementById('register-form').style.display = type === 'register' ? 'block' : 'none';
+        }
+
+        function showProductView() {
+            document.getElementById('product-view').style.display = 'block';
+            document.getElementById('auth-view').style.display = 'none';
+        }
+
+        // --- 5. FUNGSI AUTENTIKASI (KLIK DAN MASUK) ---
+        function register() {
+            const username = document.getElementById('register-username').value.trim();
+            const password = document.getElementById('register-password').value.trim();
+            const tele = document.getElementById('register-tele').value.trim();
+
+            if (!username || !password || !tele) { alert('Semua kolom wajib diisi!'); return; }
+            if (users.find(u => u.username === username)) { alert('Username sudah terdaftar! Gunakan username lain.'); return; }
+
+            const newUser = { username, password, tele };
+            users.push(newUser);
+            localStorage.setItem('ciajik_users', JSON.stringify(users));
+            
+            alert('Pendaftaran Berhasil! Silakan Login.');
+            showAuthView('login');
+        }
+
+        function login() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                currentUser = username;
+                localStorage.setItem('ciajik_currentUser', currentUser);
+                alert(`Selamat datang, ${username}! Login berhasil.`);
+                // KLIK DAN MASUK: Pindah ke tampilan produk
+                showProductView();
+                updateHeader();
+            } else { alert('Username atau Password salah!'); }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('ciajik_currentUser');
+            alert('Anda telah Logout.');
+            updateHeader();
+            showProductView();
+        }
+
+        // --- 6. FUNGSI MODAL & PEMBELIAN ---
+        function formatRupiah(number) {
+            return `Rp ${number.toLocaleString('id-ID')},00`;
+        }
+        
+        // Fungsi untuk membuka modal dengan efek animasi
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = 'block';
+            void modal.offsetWidth; 
+            modal.classList.add('show');
+        }
+
+        // Fungsi untuk menutup modal dengan efek animasi
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300); 
+        }
+
+        function openPurchaseModal(cardElement) {
+            if (!currentUser) {
+                alert('Anda harus Login untuk melakukan pembelian!');
+                showAuthView('login');
+                return;
+            }
+            
+            const productId = cardElement.dataset.id;
+            const productName = cardElement.dataset.product;
+
+            currentProduct = { id: productId, name: productName };
+
+            document.getElementById('modal-product-name').textContent = productName;
+            const select = document.getElementById('quantity-select');
+            select.innerHTML = ''; 
+
+            const options = priceData[productId];
+            options.forEach((item, index) => {
+                const option = document.createElement('option');
+                option.value = index; 
+                option.textContent = `${item.label}`;
+                select.appendChild(option);
+            });
+
+            document.getElementById('payment-method').value = 'bank';
+            updatePaymentDetails();
+
+            openModal('purchase-modal'); 
+            updatePrice();
+        }
+
+        function updatePrice() {
+            const select = document.getElementById('quantity-select');
+            const selectedIndex = select.value;
+            
+            if (selectedIndex === "") {
+                 document.getElementById('final-price-display').textContent = 'Rp 0,00';
+                 currentProduct.price = 0;
+                 currentProduct.selection = '';
+                 return;
+            }
+
+            const options = priceData[currentProduct.id];
+            const selectedItem = options[selectedIndex];
+            
+            const priceDisplay = document.getElementById('final-price-display');
+            priceDisplay.textContent = formatRupiah(selectedItem.price);
+            
+            currentProduct.price = selectedItem.price;
+            currentProduct.selection = selectedItem.label;
+        }
+
+        function updatePaymentDetails() {
+            const selectedMethod = document.getElementById('payment-method').value;
+            currentProduct.paymentMethod = selectedMethod; 
+        }
+
+        function confirmPurchase() {
+            if (!currentProduct.price || currentProduct.price === 0) {
+                alert('Silakan pilih jumlah/periode pembelian terlebih dahulu.');
+                return;
+            }
+
+            const targetId = document.getElementById('input-id').value.trim();
+            if (!targetId) { alert('ID Game / Email tujuan wajib diisi!'); return; }
+
+            closeModal('purchase-modal');
+
+            const methodDetails = paymentDetails[currentProduct.paymentMethod];
+
+            document.getElementById('transfer-product-name').textContent = `${currentProduct.name} (${currentProduct.selection})`;
+            document.getElementById('transfer-product-price').textContent = formatRupiah(currentProduct.price);
+            
+            document.getElementById('transfer-payment-type').textContent = methodDetails.type;
+            document.getElementById('transfer-account-number').textContent = methodDetails.number;
+            document.getElementById('transfer-account-name').textContent = methodDetails.name;
+            
+            openModal('transfer-modal'); 
+            document.getElementById('input-id').value = ''; 
+        }
+
+        // --- 7. INITIALIZATION (Panggil saat halaman dimuat) ---
+        window.onload = function() {
+            updateTime(); 
+            updateHeader();
+            // Tentukan tampilan awal: Login jika belum login, Produk jika sudah.
+            if (currentUser) {
+                showProductView();
+            } else {
+                showAuthView('login');
+            }
+        };
+    </script>
+</body>
+</html>
